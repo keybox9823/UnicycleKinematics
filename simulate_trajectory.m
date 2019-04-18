@@ -11,6 +11,7 @@ hold on;
 
 % define beacons
 beacons = [ 0 10 10 0 0; 0 0 10 10 0 ];
-size(cscvn(beacons));
 
-%plot(beacons,'ro','LineWidth',2);
+
+
+plot(beacons,'ro','LineWidth',2);
