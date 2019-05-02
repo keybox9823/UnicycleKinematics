@@ -3,7 +3,7 @@ clear all;
 % the robot has 3 values: x,y,phi
 %rob = [ 1.5 1.5 -90 ];
 %rob = [ 1.5 1.5 0 ];
-rob = [ 2 1 -135 ];
+rob = [ 3 1 -180 ];
 
 figure(1)
 hold on

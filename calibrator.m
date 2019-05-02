@@ -2,7 +2,7 @@ clear all;
 
 addpath("matlab_pioneer");
 
-sp=serial_port_start();
+sp=serial_port_start('COM5');
 pioneer_init(sp);
 
 pause(2);
