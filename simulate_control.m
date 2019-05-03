@@ -20,11 +20,14 @@ idx = 1;
 results = zeros(1000/dt, 2) ;
 while t < 1000
     
-    [l_v, a_v] = positionTracking(cur_angle,0.35,end_point, cur_point, 0.3,0,0.3);
+    [l_v, a_v] = positionTracking(cur_angle,0.35,end_point, cur_point, 0.3,0.3,0.3);
     
     % update point
     cur_point = cur_point + dt * l_v * [ cos(cur_angle) sin(cur_angle) ];
-    cur_angle = cur_angle + dt * a_v;
+    cur_angle = rem(cur_angle + dt * a_v + 4*pi,2*pi);
+    if cur_angle > pi
+        cur_angle = cur_angle - 2*pi;
+    end
     
     if( norm(cur_point-end_point) < 0.02 ) 
         break;

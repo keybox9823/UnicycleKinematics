@@ -1,45 +1,17 @@
-function [v,w] = decide_speeds(trajectory, cur_point, cur_lidar_plot, aux_point)
-%previousDistance = norm(cur_point - trajectory(1:2,aux_point));
-maxRadius = 500;
-K1 = 1;
-K2 = 1;
-K3 = 1;
-maxVelocity = 1000;
+function [v,w,new_cur_ref] = decide_speeds(cur_ref, references, states_list, true_point )
 
+    maxRadius = 0.05; % in meters
+    K1 = 1;
+    K2 = 0;
+    K3 = 1;
+    maxVelocity = 0.35;
 
-%{
-for i = aux_point+1:size(trajectory)
-    xValue = cur_point(1) - trajectory(1,i); 
-    yValue = cur_point(2) - trajectory(2,i);
-    distance = norm([xValue yValue]);
-    if(distance < previousDistance)
-        previousDistance = distance;
-    elseif
-        break;
-    end
-end
-%}
-
-
-while true
-    xValue = cur_point(1) - trajectory(1,aux_point); 
-    yValue = cur_point(2) - trajectory(2,aux_point);
-    distance = norm([xValue yValue]);
-
-    % TODO - check if last point
-    if distance > maxRadius
-        break;
+    if norm(true_point(1:2) - references(cur_ref)) < maxRadius
+        cur_ref = cur_ref + 1;
     end
     
-    aux_point = aux_point + 1;
-end
+    [v, w] = positionTracking(true_point(3),maxVelocity,references(cur_ref), true_point, K1,K2,K3);
 
-[v,w] = positionTracking(cur_point(3),maxVelocity,trajectory(aux_point),cur_point(1:2),K1,K2,K3);
-
+    new_cur_ref = cur_ref;
 
 end
-
-
-
-
-
