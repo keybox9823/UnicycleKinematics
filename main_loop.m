@@ -1,17 +1,18 @@
+addpath("matlab_pioneer");
+addpath("lidar");
+
+addpath("control_laws");
 
 sp = serial_port_start('COM5');
+lidar = SetupLidar('COM14');
 pioneer_init(sp);
 pause(2);
 
-addpath("matlab_pioneer");
-
+global references states_list
 [references,states_list] = get_references();
 cur_ref = 1;
 
-% linear speed in mm/second
-% angular speed in...
-v = 0;
-w = 0;
+v = 0; cur_v = 0; w = 0; cur_w = 0;
 
 % we keep track of the point given by the odometry and our estimated one
 initial_true_point = [ references(1,1) references(1,2) pi/2 ];
@@ -24,11 +25,25 @@ t = timer('TimerFcn','set_semaphore()','StartDelay',delay,'ExecutionMode','fixed
 start(t);
 i=0;
 
+global get_lidar_plot_bool
+get_lidar_plot_bool = false;
+detect_door_bool = false;
+
 while true
     i = 1;
     %%% get sensor values and store old ones
     odometry_point = read_odometry();
-    %lidar_plot = get_lidar_plot();
+    
+    if get_lidar_plot_bool
+        lidar_plot = get_lidar_plot(lidar);
+    else
+        lidar_plot = false;
+    end
+        
+    if detect_door_bool
+        detect_door();
+        detect_door_bool = false;
+    end
     
     %%% compute point in alternative coordinate system
     % the following method will transform odometry points into points in
@@ -39,12 +54,12 @@ while true
     % deciding what speeds to put on the robot will depend on the state and
     % the 'map'
 
-    [v,w,cur_ref] = decide_speeds(cur_ref, references, states_list, true_point );
+    [v,w,cur_ref] = decide_speeds(cur_v, cur_w, cur_ref, true_point, get_lidar_plot_bool );
     
     %%% send commands to the robot
     if semaphore == 1
-        true_point
         send_pioneer_comands(sp,v,w);
+        cur_v = v; cur_w = w;
         semaphore=0;
     end
     

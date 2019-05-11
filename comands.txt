@@ -1,9 +1,0 @@
-% controls to move the unicycle
-sp=serial_port_start()
- pioneer_init(sp)
-pioneer_set_controls(sp,50,0)
-
-% controls to read laser
-% change all 'maltab' variables to 1
-SetupLidar()
-lidar_test_oct
