@@ -1,10 +1,11 @@
+clear all
+
 addpath("matlab_pioneer");
-addpath("lidar");
+%addpath("lidar");
 
 addpath("control_laws");
-
 sp = serial_port_start('COM5');
-lidar = SetupLidar('COM14');
+%lidar = SetupLidar('COM14');
 pioneer_init(sp);
 pause(2);
 
@@ -30,10 +31,16 @@ get_lidar_plot_bool = false;
 detect_door_bool = false;
 
 while true
-    i = 1;
+    %{
+    i = i+1;
+    disp('iteration');
+    disp(i);
+    %}
+    
     %%% get sensor values and store old ones
     odometry_point = read_odometry();
     
+    get_lidar_plot_bool = false;
     if get_lidar_plot_bool
         lidar_plot = get_lidar_plot(lidar);
     else
@@ -54,7 +61,7 @@ while true
     % deciding what speeds to put on the robot will depend on the state and
     % the 'map'
 
-    [v,w,cur_ref] = decide_speeds(cur_v, cur_w, cur_ref, true_point, get_lidar_plot_bool );
+    [v,w,cur_ref] = decide_speeds(cur_v, cur_w, cur_ref, true_point );
     
     %%% send commands to the robot
     if semaphore == 1

@@ -13,10 +13,10 @@ function [side, side_angle] =  facing_which_side( cur_angle )
         side_angle = pi/2;
     elseif ( (cur_angle <= -pi/4) && (cur_angle >= -3*pi/4) )
         side = states.facing_down;
-        side_angle = pi;
+        side_angle = -pi/2;
     else
         side = states.facing_left;
-        side_angle = - pi/2;
+        side_angle = pi;
     end
     
 end
