@@ -65,39 +65,41 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point )
             end
 
         case states.door_left
-            if (cur_substate == states.first_substate)
-                cur_substate = states.turn_left;
-            elseif (cur_substate == states.turn_left)
-                [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
-                disp('begin left turn to angle: ');
-                disp(target_angle);
-                cur_state = states.turn;
-                next_substate = states.determine_door_state;
-            elseif (cur_substate == states.turn_right)
-                [~, target_angle] = facing_which_side(wrapToPi(true_point(3)-pi/2));
-                disp('begin right turn to angle: ');
-                disp(target_angle);
-                cur_state = states.turn;
-                next_substate = states.last_substate;
-            elseif (cur_substate == states.determine_door_state)
-                determine_door_state();
-                cur_substate = states.turn_right;
+            switch (cur_substate)
+                case states.first_substate
+                    cur_substate = states.turn_left;
+                case states.turn_left
+                    [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
+                    disp('begin left turn to angle: ');
+                    disp(target_angle);
+                    cur_state = states.turn;
+                    next_substate = states.determine_door_state;
+                case states.turn_right
+                    [~, target_angle] = facing_which_side(wrapToPi(true_point(3)-pi/2));
+                    disp('begin right turn to angle: ');
+                    disp(target_angle);
+                    cur_state = states.turn;
+                    next_substate = states.last_substate;
+                case states.determine_door_state
+                    determine_door_state();
+                    cur_substate = states.turn_right;
             end
             
         case states.door_right
-            if (cur_substate == states.first_substate)
-                cur_substate = states.turn_right;
-            elseif (cur_substate == states.turn_left)
-                [~, target_angle] = facing_which_side(true_point(3)+pi/2);
-                cur_state = turn;
-                next_substate = states.last_substate;
-            elseif ( cur_substate == states.turn_right)
-                [~, target_angle] = facing_which_side(true_point(3)-pi/2);
-                cur_state = turn;
-                cur_substate = states.determine_door_state;
-            elseif ( cur_substate == states.determine_door_state )
-                determine_door_state();
-                cur_substate = states.turn_right;
+            switch (cur_substate)
+                case states.first_substate
+                    cur_substate = states.turn_right;
+                case cur_substate == states.turn_left
+                    [~, target_angle] = facing_which_side(true_point(3)+pi/2);
+                    cur_state = turn;
+                    next_substate = states.last_substate;
+                case cur_substate == states.turn_right
+                    [~, target_angle] = facing_which_side(true_point(3)-pi/2);
+                    cur_state = turn;
+                    cur_substate = states.determine_door_state;
+                case cur_substate == states.determine_door_state 
+                    determine_door_state();
+                    cur_substate = states.turn_right;
             end          
     
         case states.door_left_and_right
