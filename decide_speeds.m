@@ -1,11 +1,11 @@
 function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
 
-    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point
+    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point delta_x delta_y
 
     maxRadius = 0.1; % in meters
     K1 = 70;
     K2 = 0;
-    K3 = 100*pi/180;
+    K3 = 40*pi/180;
     maxVelocity = 0.25;
     
     v=0;w=0;
@@ -100,6 +100,10 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             inc_ref = true;
             
         case states.correct_position_state
+            if false
+                inc_ref = true;
+                return
+            end
             get_lidar_plot_bool = true;
             correct_position_bool = true;
             inc_ref = true;
@@ -119,8 +123,8 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
         % works as a sort of auxilary state
         case states.turn
             
-            true_point(3)
-            (target_angle - initial_true_point(3) )/pi*180
+            pioneer_set_controls(sp, 0, 0);
+            pause(0.3);
             pioneer_set_heading(sp, (target_angle - initial_true_point(3) )/pi*180);
             pause(2);
             cur_state = states.no_state;

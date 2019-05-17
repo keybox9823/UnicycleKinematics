@@ -1,13 +1,18 @@
-clear all
+clearvars -except lidar
 clc
 
+global lidar
+
 addpath("matlab_pioneer");
-%addpath("lidar");
+addpath("lidar");
 
 addpath("control_laws");
-
 sp = serial_port_start('COM5');
-%lidar = SetupLidar('COM14');
+
+if isempty(lidar)
+    lidar = SetupLidar('COM14');
+end
+
 pioneer_init(sp);
 pause(2);
 
@@ -19,7 +24,7 @@ v = 0; cur_v = 0; w = 0; cur_w = 0;
 
 % we keep track of the point given by the odometry and our estimated one
 global initial_true_point
-initial_true_point = [ references(1,1) references(1,2) 0 ];
+initial_true_point = [ references(1,1) references(1,2) pi/2 ];
 
 true_point = initial_true_point;
 
@@ -36,6 +41,11 @@ get_lidar_plot_bool = false;
 global correct_position_bool
 correct_position_bool = false;
 
+global delta_x delta_y delta_theta
+delta_x = 0;
+delta_y = 0;
+delta_theta = 0;
+
 detect_door_bool = false;
 
 while true
@@ -43,8 +53,10 @@ while true
     odometry_point = read_odometry();
     
     if get_lidar_plot_bool
-        lidar_plot = get_lidar_plot(lidar);
+        lidar_plot = get_lidar_plot();
         get_lidar_plot_bool = false;
+    else
+        lidar_plot = 0;
     end
         
     if detect_door_bool
