@@ -5,6 +5,8 @@ function [true_point] = correct_position(lidar_plot, true_point, odometry_point)
     % coordinates of the top right corner of the corridor, necessary to
     % correct position
     top_right_corner = [ 15 10 ];
+    ang_threshold = 15/180*pi;
+    dist_threshold = 0.4;
     
     [rho, theta] = get_rho_theta(lidar_plot);
 
@@ -88,7 +90,7 @@ function [true_point] = correct_position(lidar_plot, true_point, odometry_point)
     
     initial_true_point = initial_true_point.';
     
-    disp('did a correction');
+    disp('DID A CORRECTION');
 
 
 end

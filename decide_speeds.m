@@ -50,14 +50,6 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             
         % go forward normally
         case states.follow_trajectory
-            % only do odomtry corrections far from the wall
-            %{
-            if norm(true_point(1:2) - references(cur_ref,:)) < (maxVelocity+0.1)
-                get_lidar_plot_bool = false;
-            else
-                get_lidar_plot_bool = true;
-            end
-            %}
             
             if norm(true_point(1:2) - references(cur_ref,:)) < maxRadius
                 cur_state = states.stop;
@@ -72,14 +64,10 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                     cur_substate = states.turn_left;
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
-                    disp('begin left turn to angle: ');
-                    disp(target_angle);
                     cur_state = states.turn;
                     next_substate = states.determine_door_state;
                 case states.turn_right
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)-pi/2));
-                    disp('begin right turn to angle: ');
-                    disp(target_angle);
                     cur_state = states.turn;
                     next_substate = states.last_substate;
                 case states.determine_door_state
@@ -91,15 +79,12 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             switch (cur_substate)
                 case states.first_substate
                     cur_substate = states.turn_right;
-                    disp('dsdsadsadsadsadsad');
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
                     cur_state = states.turn;
                     next_substate = states.last_substate;
                 case states.turn_right
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)-pi/2));
-                    disp('begin right turn to angle: ');
-                    disp(target_angle);
                     cur_state = states.turn;
                     next_substate = states.determine_door_state;
                 case states.determine_door_state 
@@ -118,6 +103,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             get_lidar_plot_bool = true;
             correct_position_bool = true;
             inc_ref = true;
+            disp('Correction State');
 
             
         % basic turn states
@@ -137,7 +123,6 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             (target_angle - initial_true_point(3) )/pi*180
             pioneer_set_heading(sp, (target_angle - initial_true_point(3) )/pi*180);
             pause(2);
-            disp('fez curva');
             cur_state = states.no_state;
             cur_substate = next_substate;
             if cur_substate == states.last_substate
@@ -170,6 +155,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
         case states.last_state
             disp('reached the end');
             return
+                   
     end
     
 end
