@@ -19,7 +19,8 @@ v = 0; cur_v = 0; w = 0; cur_w = 0;
 
 % we keep track of the point given by the odometry and our estimated one
 global initial_true_point
-initial_true_point = [ references(1,1) references(1,2) pi/2 ];
+initial_true_point = [ references(1,1) references(1,2) 0 ];
+
 true_point = initial_true_point;
 
 delay = 0.1; % 100 ms
@@ -31,17 +32,19 @@ i=0;
 
 global get_lidar_plot_bool
 get_lidar_plot_bool = false;
+
+global correct_position_bool
+correct_position_bool = false;
+
 detect_door_bool = false;
 
 while true
     %%% get sensor values and store old ones
     odometry_point = read_odometry();
     
-    get_lidar_plot_bool = false;
     if get_lidar_plot_bool
         lidar_plot = get_lidar_plot(lidar);
-    else
-        lidar_plot = false;
+        get_lidar_plot_bool = false;
     end
         
     if detect_door_bool
@@ -52,13 +55,13 @@ while true
     %%% compute point in alternative coordinate system
     % the following method will transform odometry points into points in
     % our coordinate system plus take the lidar plot to correct position
-    true_point = get_true_point(initial_true_point, odometry_point, lidar_plot);
+    true_point = get_true_point(odometry_point, lidar_plot);
     
     %%% compute what speeds to send
     % deciding what speeds to put on the robot will depend on the state and
     % the 'map'
 
-    [v,w,cur_ref] = decide_speeds(cur_v, cur_w, cur_ref, true_point );
+    [v,w,cur_ref] = decide_speeds(cur_v, cur_w, cur_ref, true_point, sp );
     
     %%% send commands to the robot
     if semaphore == 1
