@@ -1,7 +1,7 @@
 function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
 
-    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point delta_x delta_y
-
+    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point
+    
     maxRadius = 0.1; % in meters
     K1 = 70;
     K2 = 0;
@@ -51,16 +51,20 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
         % go forward normally
         case states.follow_trajectory
             
-            if norm(true_point(1:2) - references(cur_ref,:)) < maxRadius
+            if norm(true_point(1:2) - references(cur_ref,1:2)) < maxRadius
                 cur_state = states.stop;
                 next_substate = states.last_substate;
             else
-                [v, w] = positionTracking(true_point(3),maxVelocity,references(cur_ref,:), true_point, K1,K2,K3);
+                 [v, w] = positionTracking(true_point(3),maxVelocity,references(cur_ref,1:2), true_point, K1,K2,K3);
             end
 
         case states.door_left
             switch (cur_substate)
                 case states.first_substate
+                    pioneer_set_controls(sp, 0,0);
+                    pause(0.2);
+                    pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
+                    pause(1.5);
                     cur_substate = states.turn_left;
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
@@ -78,6 +82,10 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
         case states.door_right
             switch (cur_substate)
                 case states.first_substate
+                    pioneer_set_controls(sp, 0,0);
+                    pause(0.2);
+                    pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
+                    pause(1.5);
                     cur_substate = states.turn_right;
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));

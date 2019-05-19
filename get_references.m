@@ -17,8 +17,6 @@ references = [
     x           y       pi/2 %correction
     0.50        7.05    pi/2 %follow
     x           y       pi/2 % door left (2nd door)
-    0.50        8.70    pi/2 %follow
-    x           y       pi/2 %door right (3rd door)
     0.50        10.05   pi/2 %follow
     x           y       pi/2 % door left (4th door)
     0.50        11.25   pi/2  %fourth correction point
@@ -44,8 +42,6 @@ states_list = [
     states.correct_position_state
     states.follow_trajectory    
     states.door_left
-    states.follow_trajectory
-    states.door_right
     states.follow_trajectory
     states.door_left
     states.follow_trajectory

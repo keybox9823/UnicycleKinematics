@@ -10,10 +10,7 @@ yValue = reference(2) - position(2);
 error = sqrt(yValue*yValue + xValue*xValue);
 
 phi = atan2(yValue,xValue);
-alpha = rem(phi - theta + 4*pi,2*pi);
-if alpha > pi
-    alpha = alpha - 2*pi;
-end
+alpha = wrapToPi(phi - theta);
 
 linearVelocity = maxVelocity*tanh(K1*error);
 if alpha ~= 0

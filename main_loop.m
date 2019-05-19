@@ -48,13 +48,19 @@ delta_theta = 0;
 
 detect_door_bool = false;
 
+global odometry_points true_points
+
+i = 0;
 while true
+    pause(0.001);
+    i = i+1;
     %%% get sensor values and store old ones
     odometry_point = read_odometry();
     
     if get_lidar_plot_bool
         lidar_plot = get_lidar_plot();
         get_lidar_plot_bool = false;
+        did_plot(i) = 1;
     else
         lidar_plot = 0;
     end
@@ -81,6 +87,9 @@ while true
         cur_v = v; cur_w = w;
         semaphore=0;
     end
+    
+    true_points(round(i/100+1), :) = true_point;
+    odometry_points(round(i/100+1), :) = odometry_point;
     
 end
 
