@@ -1,7 +1,7 @@
 function [true_point] = correct_position(lidar_plot, true_point, odometry_point, first_ang)
 
   
-    global delta_x delta_y delta_theta 
+    global delta_x delta_y delta_theta initial_true_point 
 
     % coordinates of the top right corner of the corridor, necessary to
     % correct position
@@ -36,9 +36,8 @@ function [true_point] = correct_position(lidar_plot, true_point, odometry_point,
                 return
             end
             
-            delta = [ cos(first_ang) +sin(first_ang) ; -sin(first_ang) cos(first_ang) ] * [ true_dist_lidar - true_point(1)  ; 0];
-            
-            delta_y = delta_y + delta(2);
+            delta = [ cos(first_ang) +sin(first_ang) ; -sin(first_ang) cos(first_ang) ] * [ true_dist_lidar -  initial_true_point(1)  ; 0];
+            delta_y = delta(2) - odometry_point(2);
             disp("CORRECTED DELTA");
             
             delta_theta = wrapToPi( true_angle_lidar - true_point(3) );
