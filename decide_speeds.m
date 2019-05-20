@@ -1,6 +1,6 @@
 function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
 
-    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point
+    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool
     
     maxRadius = 0.1; % in meters
     K1 = 70;
@@ -69,14 +69,15 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
                     cur_state = states.turn;
-                    next_substate = states.determine_door_state;
+                    next_substate = states.get_plot;
+                case states.get_plot
+                    get_lidar_plot_bool = true;
+                    determine_door_state_bool = true;
+                    cur_substate = states.turn_right;
                 case states.turn_right
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)-pi/2));
                     cur_state = states.turn;
                     next_substate = states.last_substate;
-                case states.determine_door_state
-                    determine_door_state();
-                    cur_substate = states.turn_right;
             end
             
         case states.door_right
@@ -94,18 +95,27 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 case states.turn_right
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)-pi/2));
                     cur_state = states.turn;
-                    next_substate = states.determine_door_state;
-                case states.determine_door_state 
-                    determine_door_state();
-                    %cur_substate = states.turn_right;
+                    next_substate = states.get_plot;
+                case states.get_plot
+                    get_lidar_plot_bool = true;
+                    determine_door_state_bool = true;
                     cur_substate = states.turn_left;
             end          
-    
-        case states.door_left_and_right
             
         case states.door_forward
-            determine_door_state();
-            inc_ref = true;
+            switch (cur_substate)
+                case states.first_substate
+                    pioneer_set_controls(sp, 0,0);
+                    pause(0.2);
+                    pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
+                    pause(1.5);
+                    cur_substate = states.get_plot;
+                case states.get_plot
+                    get_lidar_plot_bool = true;
+                    determine_door_state_bool = true;
+                    cur_substate = states.last_substate;
+                    inc_ref=true;
+            end
             
         case states.correct_position_state
             if false

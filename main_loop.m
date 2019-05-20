@@ -41,6 +41,9 @@ get_lidar_plot_bool = false;
 global correct_position_bool
 correct_position_bool = false;
 
+global determine_door_state_bool
+determine_door_state_bool = false;
+
 global delta_x delta_y delta_theta
 delta_x = 0;
 delta_y = 0;
@@ -65,9 +68,9 @@ while true
         lidar_plot = 0;
     end
         
-    if detect_door_bool
-        detect_door();
-        detect_door_bool = false;
+    if determine_door_state_bool
+        determine_door_state(lidar_plot);
+        detect_door_state_bool = false;
     end
     
     %%% compute point in alternative coordinate system
