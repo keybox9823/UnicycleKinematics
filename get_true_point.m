@@ -1,3 +1,4 @@
+
 function [true_point] = get_true_point(odometry_point,lidar_plot )
 % this function will take the points and the lidar plot to discover and
 % correct the position of the robot
@@ -14,7 +15,7 @@ function [true_point] = get_true_point(odometry_point,lidar_plot )
     true_point(3) = wrapToPi(first_ang + odometry_point(3) + delta_theta);
     true_point = true_point.';
 
-    if correct_position_bool
+    if correct_position_bool && use_lidar
         disp('true point before correction');
         disp('the old values for delta are')
         disp([ delta_x delta_y delta_theta]);

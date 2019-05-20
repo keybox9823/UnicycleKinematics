@@ -3,13 +3,16 @@ clc
 
 global lidar
 
+global use_lidar
+use_lidar = true;
+
 addpath("matlab_pioneer");
 addpath("lidar");
 
 addpath("control_laws");
 sp = serial_port_start('COM5');
 
-if isempty(lidar)
+if isempty(lidar) && use_lidar
     lidar = SetupLidar('COM14');
 end
 
@@ -35,7 +38,7 @@ t = timer('TimerFcn','set_semaphore()','StartDelay',delay,'ExecutionMode','fixed
 start(t);
 i=0;
 
-global get_lidar_plot_bool
+global get_lidar_plot_bool 
 get_lidar_plot_bool = false;
 
 global correct_position_bool
@@ -60,7 +63,7 @@ while true
     %%% get sensor values and store old ones
     odometry_point = read_odometry();
     
-    if get_lidar_plot_bool
+    if get_lidar_plot_bool && use_lidar
         lidar_plot = get_lidar_plot();
         get_lidar_plot_bool = false;
         did_plot(i) = 1;
@@ -68,7 +71,7 @@ while true
         lidar_plot = 0;
     end
         
-    if determine_door_state_bool
+    if determine_door_state_bool && use_lidar
         determine_door_state(lidar_plot);
         detect_door_state_bool = false;
     end
