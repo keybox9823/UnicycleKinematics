@@ -1,8 +1,6 @@
-function plt = get_lidar_plot()
+function plt = get_lidar_plot(lidar)
 
-    global lidar
-
-    scan = LidarScan();
+    scan = LidarScan(lidar);
     
     % 10000 will be our choice for 
     scan(scan==0) = 7000;
@@ -12,7 +10,7 @@ function plt = get_lidar_plot()
     
     
 %     plt(2,:) = linspace(-2*pi/3,2*pi/3,360/theta_resol);
-    
+
     %plt(2,:) = fliplr(scan);
     plt(1,:) = scan;
 

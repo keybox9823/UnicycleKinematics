@@ -2,10 +2,10 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
 
     global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool
     
-    maxRadius = 0.1; % in meters
-    K1 = 70;
+    maxRadius = 0.2; % in meters
+    K1 = 100;
     K2 = 0;
-    K3 = 40*pi/180;
+    K3 = 100*pi/180;
     maxVelocity = 0.25;
     
     v=0;w=0;

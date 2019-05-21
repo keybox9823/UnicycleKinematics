@@ -1,6 +1,6 @@
 function [rho, theta] = get_correction_parameters(rho1, rho2, angle)
 
-    a = [ -rho1*sin(angle) rho2*cos(angle) ];
+    a = [ -rho1*sin(angle) rho1*cos(angle) ];
     b = [ rho2*sin(angle) rho2*cos(angle) ];
 
     m = 1/tan(angle) * ( rho2- rho1) / (rho2+rho1);

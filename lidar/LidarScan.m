@@ -8,9 +8,7 @@
 % switch off the MATLAB variable if used in  Octave
 % it assumes the instrument-control pkg was loaded before (most likely in the SeetupLidar function)
 %
-function [rangescan]=LidarScan()
-
-global lidar
+function [rangescan]=LidarScan(lidar)
   
 MATLAB = 1;
 

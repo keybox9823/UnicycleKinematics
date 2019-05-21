@@ -1,8 +1,6 @@
 clearvars -except lidar
 clc
 
-global lidar
-
 global use_lidar
 use_lidar = true;
 
@@ -12,7 +10,7 @@ addpath("lidar");
 addpath("control_laws");
 sp = serial_port_start('COM5');
 
-if isempty(lidar) && use_lidar
+if use_lidar
     lidar = SetupLidar('COM14');
 end
 
@@ -54,17 +52,15 @@ delta_theta = 0;
 
 detect_door_bool = false;
 
-global odometry_points true_points
+global odometry_points true_points deltas
 
 i = 0;
 while true
-    pause(0.001);
-    i = i+1;
     %%% get sensor values and store old ones
     odometry_point = read_odometry();
     
     if get_lidar_plot_bool && use_lidar
-        lidar_plot = get_lidar_plot();
+        lidar_plot = get_lidar_plot(lidar);
         get_lidar_plot_bool = false;
         did_plot(i) = 1;
     else
@@ -73,7 +69,7 @@ while true
         
     if determine_door_state_bool && use_lidar
         determine_door_state(lidar_plot);
-        detect_door_state_bool = false;
+        determine_door_state_bool = false;
     end
     
     %%% compute point in alternative coordinate system
@@ -89,13 +85,16 @@ while true
     
     %%% send commands to the robot
     if semaphore == 1
+        i = i+1;
+        odometry_points(i,:) = odometry_point;
+        true_points(i, :) = true_point;
+        deltas(i,:) = [ delta_x delta_y delta_theta ];
+
         send_pioneer_comands(sp,v,w);
         cur_v = v; cur_w = w;
         semaphore=0;
     end
     
-    true_points(round(i/100+1), :) = true_point;
-    odometry_points(round(i/100+1), :) = odometry_point;
     
 end
 

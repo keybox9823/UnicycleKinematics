@@ -2,7 +2,8 @@ function determine_door_state(lidar_plot)
     
     opened_threshold = 55;
     closed_threshold = 8; 
-
+    
+    plot(lidar_plot);
     nzeros = (426-256+1) - nnz(lidar_plot(256:426)); %number of zeros in lidar scan between -30º and 30º
     
     if (nzeros<=closed_threshold)
