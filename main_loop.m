@@ -1,6 +1,8 @@
 clearvars -except lidar
 clc
 
+global lidar
+
 global use_lidar
 use_lidar = true;
 
@@ -10,7 +12,7 @@ addpath("lidar");
 addpath("control_laws");
 sp = serial_port_start('COM5');
 
-if use_lidar
+if use_lidar && isempty(lidar)
     lidar = SetupLidar('COM14');
 end
 
@@ -25,7 +27,7 @@ v = 0; cur_v = 0; w = 0; cur_w = 0;
 
 % we keep track of the point given by the odometry and our estimated one
 global initial_true_point
-initial_true_point = [ references(1,1) references(1,2) pi/2 ];
+initial_true_point = [ references(1,1) references(1,2) references(1,3) ];
 
 true_point = initial_true_point;
 
@@ -60,7 +62,7 @@ while true
     odometry_point = read_odometry();
     
     if get_lidar_plot_bool && use_lidar
-        lidar_plot = get_lidar_plot(lidar);
+        lidar_plot = get_lidar_plot();
         get_lidar_plot_bool = false;
         did_plot(i) = 1;
     else
@@ -93,6 +95,10 @@ while true
         send_pioneer_comands(sp,v,w);
         cur_v = v; cur_w = w;
         semaphore=0;
+    end
+    
+    if states_list(cur_ref) == states.last_state
+        break;
     end
     
     

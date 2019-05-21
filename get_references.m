@@ -5,50 +5,48 @@ y=0;
 
 %0.66
 references = [           
-%     -2.64       -2.97 %init point  
-%     0.66        -2.97 %follow
-%     x           y    %turn left
-    0.50        0       pi/2
-    0.50        1.75    pi/2    %first correction point
+    
+
+    -2.64       -2.97   0%init point  
+    0.66        -2.97   0%follow
+    x           y       0%turn left
+    0.66        0       pi/2
+    0.84        1.75    pi/2    %first correction point
     x           y       pi/2    %correction
-    0.50        3.94    pi/2 %follow
+    0.84        3.94    pi/2 %follow
     x           y       pi/2 % door left (1st door)
-    0.50        5.43    pi/2 %second correction point
+    0.84        5.43    pi/2 %second correction point
     x           y       pi/2 %correction
-    0.50        6.93    pi/2 %follow
+    0.84        6.93    pi/2 %follow
     x           y       pi/2 % door left (2nd door)
-    0.50        8.42    pi/2 %third correction point
+    0.84        8.42    pi/2 %third correction point
     x           y       pi/2 %follow    
-    0.50        9.92    pi/2 %follow
+    0.84        9.92    pi/2 %follow
     x           y       pi/2 % door left (3th door)
-    0.50        11.29   pi/2  %fourth correction point
+    0.84        11.29   pi/2  %fourth correction point
     x           y       pi/2  %correction   
-    0.50        12.66   pi/2 %follow
+    0.84        12.66   pi/2 %follow
     x           y       pi/2 %door left(4th door)
-    0.83        15.14   pi/2 %follow        
+    0.94        15.14   pi/2 %follow        
     x           y       pi/2 %door front
     x           y       pi/2 %turn right
     %end first corridor
     
-    2.02        15.14   0 %follow
-    x           y       0 %correct position
-    3.06        15.14   0 %follow
+    3.06        15.20   0 %follow
     x           y       0 %door left(1st door)
-    4.44        15.14   0 %follow
+    4.44        15.20   0 %follow
     x           y       0 %correct position
-    5.82        15.14   0 %follow
+    5.82        15.20   0 %follow
     x           y       0 %door left(2nd door)
-    8.16        15.14   0 %follow
+    8.16        15.20   0 %follow
     x           y       0 %correct position
-    10.08       15.14   0 %follow
+    10.08       15.20   0 %follow
     x           y       0 %correct position
-    12.59       15.14   0 %follow
+    12.59       15.20   0 %follow
     x           y       0 %door left(3rd door)
-    13.78       15.14   0 %follow
-    x           y       0 %correct position
-    14.98       15.14   0 %follow
+    14.98       15.20   0 %follow
     x           y       0 %door left (4th door)
-    15.15       15.14   0 %follow
+    15.15       15.20   0 %follow
     x           y       0 %turn right
     %end second corridor
     
@@ -70,7 +68,31 @@ references = [
     x           y       -pi/2 %turn_right
     %end third corridor
     
-    %corrigir door front
+    %CORRIGIR DOOR FRONT
+    14.84       0.84    -pi %follow
+    x           y       -pi %door left (1st door)
+    12.69       0.84    -pi %follow
+    x           y       -pi %correct position
+    10.35       0.84    -pi %follow
+    x           y       -pi %door left (2nd door)
+    8.41        0.84    -pi %follow 
+    x           y       -pi %correct position
+    6.97        0.84    -pi %follow
+    x           y       -pi %correct position
+    4.74        0.84    -pi %follow
+    x           y       -pi %door left (3rd door)
+    2.67        0.84    -pi %follow
+    x           y       -pi %correct position
+    0.66        0.84    -pi %follow
+    x           y       -pi %turn left
+    0.66        -2.97   -pi/2 %follow
+    x           y       -pi/2 %turn right
+    -2.64       -2.97   -pi   %follow
+    x           y       -pi   %end /stop
+    
+    
+    
+    
     
     
     
@@ -80,11 +102,12 @@ references = [
 ];
 
 states_list = [
-%     states.state0    
-%     states.follow_trajectory
-%     states.turn_left
+   
 
-    states.state0
+    states.state0    
+    states.follow_trajectory
+    states.turn_left
+    states.follow_trajectory
     states.follow_trajectory
     states.correct_position_state
     states.follow_trajectory    
@@ -107,8 +130,6 @@ states_list = [
     %end first corridor
     
     states.follow_trajectory
-    states.correct_position_state
-    states.follow_trajectory
     states.door_left
     states.follow_trajectory
     states.correct_position_state
@@ -120,8 +141,6 @@ states_list = [
     states.correct_position_state
     states.follow_trajectory
     states.door_left
-    states.follow_trajectory
-    states.correct_position_state
     states.follow_trajectory
     states.door_left
     states.follow_trajectory
@@ -147,6 +166,27 @@ states_list = [
     %end third corridor 
     
     %correct door front
+    
+    states.follow_trajectory
+    states.door_left
+    states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
+    states.door_left
+    states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
+    states.door_left
+    states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
+    states.turn_left
+    states.follow_trajectory
+    states.turn_right
+    states.follow_trajectory
+    states.last_state
     
     
     

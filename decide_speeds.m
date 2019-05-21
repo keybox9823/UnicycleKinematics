@@ -2,13 +2,14 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
 
     global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool
     
-    maxRadius = 0.2; % in meters
+    maxRadius = 0.1; % in meters
     K1 = 100;
     K2 = 0;
     K3 = 100*pi/180;
     maxVelocity = 0.25;
     
-    v=0;w=0;
+    v=0;
+    w=0;
     
     persistent cur_state
     if isempty(cur_state)
@@ -52,8 +53,9 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
         case states.follow_trajectory
             
             if norm(true_point(1:2) - references(cur_ref,1:2)) < maxRadius
-                cur_state = states.stop;
-                next_substate = states.last_substate;
+                %cur_state = states.stop;
+                %next_substate = states.last_substate;
+                inc_ref = true;
             else
                  [v, w] = positionTracking(true_point(3),maxVelocity,references(cur_ref,1:2), true_point, K1,K2,K3);
             end
@@ -64,20 +66,24 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                     pioneer_set_controls(sp, 0,0);
                     pause(0.2);
                     pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
-                    pause(1.5);
+                    pause(1.2);
                     cur_substate = states.turn_left;
+                    disp('stopped');
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
                     cur_state = states.turn;
                     next_substate = states.get_plot;
+                    disp('turn left');
                 case states.get_plot
                     get_lidar_plot_bool = true;
                     determine_door_state_bool = true;
                     cur_substate = states.turn_right;
+                    disp('get plot');
                 case states.turn_right
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)-pi/2));
                     cur_state = states.turn;
                     next_substate = states.last_substate;
+                    disp('turn right');
             end
             
         case states.door_right
@@ -86,7 +92,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                     pioneer_set_controls(sp, 0,0);
                     pause(0.2);
                     pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
-                    pause(1.5);
+                    pause(1.2);
                     cur_substate = states.turn_right;
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
@@ -125,6 +131,8 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             get_lidar_plot_bool = true;
             correct_position_bool = true;
             inc_ref = true;
+            v = cur_v;
+            w = cur_w;
             disp('Correction State');
 
             
@@ -167,7 +175,6 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 cur_state = states.no_state;
                 cur_substate = next_substate;
                 if cur_substate == states.last_substate
-                    true_point(3)
                     inc_ref = true;
                 end
                     

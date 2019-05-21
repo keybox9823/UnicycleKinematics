@@ -1,5 +1,6 @@
-function plt = get_lidar_plot(lidar)
+function plt = get_lidar_plot()
 
+    global lidar
     scan = LidarScan(lidar);
     
     % 10000 will be our choice for 
