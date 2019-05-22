@@ -32,6 +32,8 @@ references = [
     x           y       pi/2 %turn right
     %end first corridor
     
+    2.02        15.20   0 %follow
+    x           y       0 %correction point
     3.06        15.20   0 %follow
     x           y       0 %door left(1st door)
     4.44        15.20   0 %follow
@@ -44,13 +46,17 @@ references = [
     x           y       0 %correct position
     12.59       15.20   0 %follow
     x           y       0 %door left(3rd door)
+    13.79       15.20   0 %follow
+    x           y       0 %correct position    
     14.98       15.20   0 %follow
     x           y       0 %door left (4th door)
-    15.15       15.20   0 %follow
+    %15.15       15.20   0 %follow
     x           y       0 %turn right
     %end second corridor
     
     15.15       13.56   -pi/2 %follow
+    x           y       -pi/2 %correct position
+    15.15       12.75   -pi/2 %follow
     x           y       -pi/2 %correct position
     15.15       11.98   -pi/2 %follow
     x           y       -pi/2 %correct position
@@ -60,7 +66,9 @@ references = [
     x           y       -pi/2 %correct position
     15.15       6.66    -pi/2 %follow
     x           y       -pi/2 %door left (2nd door)
-    15.15       4.71    -pi/2 %follow
+    15.15       5       -pi/2 %follow
+    x           y       -pi/2 %correct position
+    15.15       3.6     -pi/2 %follow
     x           y       -pi/2 %correct position
     15.15       2.61    -pi/2 %follow
     x           y       -pi/2 %door left (3rd door)
@@ -130,7 +138,15 @@ states_list = [
     %end first corridor
     
     states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
     states.door_left
+    states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
+    states.door_left
+    states.follow_trajectory
+    states.correct_position_state
     states.follow_trajectory
     states.correct_position_state
     states.follow_trajectory
@@ -138,12 +154,8 @@ states_list = [
     states.follow_trajectory
     states.correct_position_state
     states.follow_trajectory
-    states.correct_position_state
-    states.follow_trajectory
     states.door_left
-    states.follow_trajectory
-    states.door_left
-    states.follow_trajectory
+    %states.follow_trajectory
     states.turn_right
     %end second corridor
     
@@ -152,8 +164,6 @@ states_list = [
     states.follow_trajectory
     states.correct_position_state
     states.follow_trajectory
-    states.door_left
-    states.follow_trajectory
     states.correct_position_state
     states.follow_trajectory
     states.door_left
@@ -162,6 +172,12 @@ states_list = [
     states.follow_trajectory
     states.door_left
     states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
+    states.correct_position_state
+    states.follow_trajectory
+    states.door_left
+    %states.follow_trajectory
     states.turn_right
     %end third corridor 
     

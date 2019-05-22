@@ -3,9 +3,9 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
     global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool delta_theta
     
     maxRadius = 0.2; % in meters
-    K1 = 100;
+    K1 = 70;
     K2 = 0;
-    K3 = 100*pi/180;
+    K3 = 10*pi/180;
     maxVelocity = 0.25;
     
     v=0;
@@ -152,7 +152,6 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             
             pioneer_set_controls(sp, 0, 0);
             pause(0.3);
-            (target_angle - initial_true_point(3) - delta_theta )/pi*180
             pioneer_set_heading(sp, round((target_angle - initial_true_point(3) - delta_theta )/pi*180));
             pause(2);
             cur_state = states.no_state;
