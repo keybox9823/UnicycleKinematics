@@ -65,9 +65,9 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 case states.first_substate
                     pioneer_set_controls(sp, 0,0);
                     pause(0.2);
-                    disp((references(cur_ref,3) - initial_true_point(3) - delta_theta )/pi*180);
-                    pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3) - delta_theta )/pi*180));
-                    pause(1.2);
+                    %disp((references(cur_ref,3) - initial_true_point(3) - delta_theta )/pi*180);
+                    %pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3))/pi*180));
+                    %pause(1.2);
                     cur_substate = states.turn_left;
                     disp('stopped');
                 case states.turn_left
@@ -92,8 +92,8 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 case states.first_substate
                     pioneer_set_controls(sp, 0,0);
                     pause(0.2);
-                    pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3) )/pi*180));
-                    pause(1.2);
+                    %pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3))/pi*180));
+                    %pause(1.2);
                     cur_substate = states.turn_right;
                 case states.turn_left
                     [~, target_angle] = facing_which_side(wrapToPi(true_point(3)+pi/2));
@@ -114,7 +114,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 case states.first_substate
                     pioneer_set_controls(sp, 0,0);
                     pause(0.2);
-                    pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
+                    pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3) - delta_theta)/pi*180));
                     pause(1.5);
                     cur_substate = states.get_plot;
                 case states.get_plot
@@ -152,7 +152,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             
             pioneer_set_controls(sp, 0, 0);
             pause(0.3);
-            pioneer_set_heading(sp, round((target_angle - initial_true_point(3) - delta_theta )/pi*180));
+            pioneer_set_heading(sp, round((target_angle - initial_true_point(3) - delta_theta)/pi*180));
             pause(2);
             cur_state = states.no_state;
             cur_substate = next_substate;

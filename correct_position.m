@@ -2,7 +2,8 @@ function [true_point] = correct_position(lidar_plot, true_point, odometry_point,
 
   
     global delta_x delta_y delta_theta initial_true_point 
-
+    %persistent delta_y_acc delta_x_acc delta_theta_acc
+    
     % coordinates of the top right corner of the corridor, necessary to
     % correct position
     top_right_corner = [ 15.75 15.74 ];
@@ -10,8 +11,6 @@ function [true_point] = correct_position(lidar_plot, true_point, odometry_point,
     dist_threshold = 1;
     
     [rho, theta] = get_rho_theta(lidar_plot);
-    rho
-    theta
 
     corridor = find_corridor(true_point);
     

@@ -12,6 +12,7 @@ error = sqrt(yValue*yValue + xValue*xValue);
 phi = atan2(yValue,xValue);
 alpha = wrapToPi(phi - theta);
 
+
 linearVelocity = maxVelocity*tanh(K1*error);
 if alpha ~= 0
     angularVelocity = maxVelocity*((1+K2*phi/alpha)*tanh(K1*error)*sin(alpha)/error + K3*tanh(alpha));
