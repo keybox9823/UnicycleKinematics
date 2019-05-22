@@ -23,4 +23,4 @@ plot(true_points(:,1));
  figure
  plot(deltas(:,2));
  figure
- plot(deltas(:,3));
+ plot(deltas(:,3)/pi*180);

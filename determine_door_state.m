@@ -1,18 +1,29 @@
 function determine_door_state(lidar_plot)
     
-    opened_threshold = 55;
-    closed_threshold = 8; 
+    count = 0;
+    opened_threshold = 87;
+    closed_threshold = 12; 
     
     plot(lidar_plot);
     nzeros = (426-256+1) - nnz(lidar_plot(256:426)); %number of zeros in lidar scan between -30º and 30º
+    for i=256:426
+        if lidar_plot(i)>1500
+            count = count + 1;
+        end
+    end
     
     if (nzeros<=closed_threshold)
+        [data,Fs] = audioread('knockknock.mp3');
         disp('PORTA FECHADA');
     elseif (nzeros>=opened_threshold)
+        [data,Fs] = audioread('entreaberta.mp3');
         disp('PORTA ABERTA');
     else
+        [data,Fs] = audioread('aberta.mp3');
         disp('PORTA ENTREABERTA');
     end
+    
+    soundsc(data,Fs);
     
     %fechada=0
     %30º = 14

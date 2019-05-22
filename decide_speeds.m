@@ -1,8 +1,8 @@
 function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
 
-    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool
+    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool delta_theta
     
-    maxRadius = 0.1; % in meters
+    maxRadius = 0.2; % in meters
     K1 = 100;
     K2 = 0;
     K3 = 100*pi/180;
@@ -65,7 +65,8 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 case states.first_substate
                     pioneer_set_controls(sp, 0,0);
                     pause(0.2);
-                    pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
+                    disp((references(cur_ref,3) - initial_true_point(3) - delta_theta )/pi*180);
+                    pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3) - delta_theta )/pi*180));
                     pause(1.2);
                     cur_substate = states.turn_left;
                     disp('stopped');
@@ -91,7 +92,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 case states.first_substate
                     pioneer_set_controls(sp, 0,0);
                     pause(0.2);
-                    pioneer_set_heading(sp, (references(cur_ref,3) - initial_true_point(3) )/pi*180);
+                    pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3) )/pi*180));
                     pause(1.2);
                     cur_substate = states.turn_right;
                 case states.turn_left
@@ -151,7 +152,8 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             
             pioneer_set_controls(sp, 0, 0);
             pause(0.3);
-            pioneer_set_heading(sp, (target_angle - initial_true_point(3) )/pi*180);
+            (target_angle - initial_true_point(3) - delta_theta )/pi*180
+            pioneer_set_heading(sp, round((target_angle - initial_true_point(3) - delta_theta )/pi*180));
             pause(2);
             cur_state = states.no_state;
             cur_substate = next_substate;

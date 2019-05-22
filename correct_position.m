@@ -10,6 +10,8 @@ function [true_point] = correct_position(lidar_plot, true_point, odometry_point,
     dist_threshold = 1;
     
     [rho, theta] = get_rho_theta(lidar_plot);
+    rho
+    theta
 
     corridor = find_corridor(true_point);
     
