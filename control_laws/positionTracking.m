@@ -20,5 +20,17 @@ else
     angularVelocity = maxVelocity*K2*phi*tanh(K1*error)/error;
 end
 
+% K1 = 0.2;
+% K2 = 0.2;
+% K3 = 0.2;
+% 
+% werror = reference - position;
+% error = [cos(position(3)),sin(position(3)),0;...
+%         -sin(position(3)),cos(position(3)),0;...
+%         0,0,1]*(werror.');
+% u=[-K1*error(1);-K2*error(2)-K3*error(3)];
+% linearVelocity = abs(u(1))+maxVelocity;
+% angularVelocity=-u(2);
+
 end
 

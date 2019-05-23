@@ -7,9 +7,9 @@ y=0;
 references = [           
     
 
-    -2.64       -2.97   0%init point  
-    0.66        -2.97   0%follow
-    x           y       0%turn left
+   % -2.64       -2.97   0%init point  
+   % 0.66        -2.97   0%follow
+   % x           y       0%turn left
     0.66        0       pi/2
     0.84        1.75    pi/2    %first correction point
     x           y       pi/2    %correction
@@ -112,10 +112,12 @@ references = [
 states_list = [
    
 
-    states.state0    
-    states.follow_trajectory
-    states.turn_left
-    states.follow_trajectory
+    %states.state0    
+    %states.follow_trajectory
+    %states.turn_left
+    
+    states.state0
+    %states.follow_trajectory
     states.follow_trajectory
     states.correct_position_state
     states.follow_trajectory    

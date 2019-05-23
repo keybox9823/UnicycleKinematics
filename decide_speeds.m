@@ -3,9 +3,9 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
     global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool delta_theta
     
     maxRadius = 0.2; % in meters
-    K1 = 70;
+    K1 = 80;
     K2 = 0;
-    K3 = 10*pi/180;
+    K3 = 80*pi/180;
     maxVelocity = 0.25;
     
     v=0;
@@ -57,7 +57,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 %next_substate = states.last_substate;
                 inc_ref = true;
             else
-                 [v, w] = positionTracking(true_point(3),maxVelocity,references(cur_ref,1:2), true_point, K1,K2,K3);
+                 [v, w] = positionTracking(true_point(3),maxVelocity,references(cur_ref,:), true_point, K1,K2,K3);
             end
 
         case states.door_left
@@ -129,11 +129,13 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 inc_ref = true;
                 return
             end
+            pioneer_set_controls(sp,0,0);
+            pause(0.5);
             get_lidar_plot_bool = true;
             correct_position_bool = true;
             inc_ref = true;
-            v = cur_v;
-            w = cur_w;
+            %v = cur_v;
+            %w = cur_w;
             disp('Correction State');
 
             

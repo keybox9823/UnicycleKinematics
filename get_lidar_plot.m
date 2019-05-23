@@ -7,5 +7,7 @@ function plt = get_lidar_plot()
     scan(scan==0) = 7000;
     scan = scan / 1000;
     plt(1,:) = scan;
+    
+    disp('did a new plot')
 
 end

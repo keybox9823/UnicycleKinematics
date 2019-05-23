@@ -1,6 +1,7 @@
 clearvars -except lidar
 clc
 
+
 global lidar
 
 global use_lidar
@@ -77,7 +78,7 @@ while true
     %%% compute point in alternative coordinate system
     % the following method will transform odometry points into points in
     % our coordinate system plus take the lidar plot to correct position
-    true_point = get_true_point(odometry_point, lidar_plot);
+    true_point = get_true_point(odometry_point, lidar_plot, cur_ref);
     
     %%% compute what speeds to send
     % deciding what speeds to put on the robot will depend on the state and
@@ -102,7 +103,7 @@ while true
     end
     
     
-end
+ end
 
 stop(t);
 disp('reached the end');
