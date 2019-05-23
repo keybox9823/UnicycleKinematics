@@ -18,7 +18,7 @@ if use_lidar && isempty(lidar)
 end
 
 pioneer_init(sp);
-pause(2);
+pause(0.5); %mudei pause
 
 global references states_list
 [references,states_list] = get_references();
