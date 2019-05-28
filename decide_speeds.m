@@ -1,6 +1,7 @@
 function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
 
-    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool delta_theta
+    global references states_list get_lidar_plot_bool correct_position_bool initial_true_point determine_door_state_bool delta_theta 
+    global delta_theta_acc
     
     maxRadius = 0.2; % in meters
     K1 = 80;
@@ -45,6 +46,7 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
     end
 
     switch (cur_state)
+           
         case states.state0
             disp('about to start');
             inc_ref = true;
@@ -113,10 +115,11 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             switch (cur_substate)
                 case states.first_substate
                     pioneer_set_controls(sp, 0,0);
-                    pause(0.2);
-                    pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3) - delta_theta)/pi*180));
+                    pause(0.1);
+                    pioneer_set_heading(sp, round((references(cur_ref,3) - initial_true_point(3) - delta_theta_acc)/pi*180));
                     pause(1.5);
                     cur_substate = states.get_plot;
+                    disp('DOOR FORWARD');
                 case states.get_plot
                     get_lidar_plot_bool = true;
                     determine_door_state_bool = true;
@@ -154,7 +157,8 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
             
             pioneer_set_controls(sp, 0, 0);
             pause(0.3);
-            pioneer_set_heading(sp, round((target_angle - initial_true_point(3) - delta_theta)/pi*180));
+            pioneer_set_heading(sp, round((target_angle - initial_true_point(3) - delta_theta_acc)/pi*180));
+            
             pause(2);
             cur_state = states.no_state;
             cur_substate = next_substate;
@@ -180,7 +184,6 @@ function [v,w,cur_ref] = decide_speeds(cur_v,cur_w, cur_ref, true_point, sp )
                 if cur_substate == states.last_substate
                     inc_ref = true;
                 end
-                    
             end
 
         % very last possible state

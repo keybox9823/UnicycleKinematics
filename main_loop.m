@@ -53,6 +53,12 @@ delta_x = 0;
 delta_y = 0;
 delta_theta = 0;
 
+global delta_x_acc delta_y_acc delta_theta_acc
+delta_x_acc = 0;
+delta_y_acc = 0;
+delta_theta_acc = 0;
+
+
 detect_door_bool = false;
 
 global odometry_points true_points deltas

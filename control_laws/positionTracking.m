@@ -23,6 +23,7 @@ end
 % K1 = 0.2;
 % K2 = 0.2;
 % K3 = 0.2;
+% maxVelocity = 0.15;
 % 
 % werror = reference - position;
 % error = [cos(position(3)),sin(position(3)),0;...
